@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Employee>
+
+@{
+    ViewBag.Title = "Employee List";
+    
+}
+
+<div class="card-deck">
+    @foreach (var employee in Model)
+    {
+        //ako user ne uploada sliku dodijelit ce mu se defaultna -> 'unknownUser.jpg'
+        var photoPath = "~/images/" + (employee.PhotoPath ?? "unknownUser.jpg");
+
+        // this par of code in first div : style="min-width: 18rem; max-width:30.5%;"
+        // means we are showing max 3 user in a row
+        <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
+            <div class="card-header">
+                <h3>@employee.Name</h3>
+            </div>
+            <!--tagHelper on image : asp-append-version="true" -->
+            <!-- tagHelper add unique hash value on image -->
+            <img class="card-img-top imageThumbnail" src="@photoPath"
+                 asp-append-version="true" />
+
+            <div class="card-footer text-center">
+                <!--tagHelper for links-->
+                <!--why use tag helpers: https://www.youtube.com/watch?v=pXvizSVe-eQ&list=PL6n9fhu94yhVkdrusLaQsfERmL_Jh4XmU&index=36-->
+                <a asp-controller="home" asp-action="details" 
+                   asp-route-id="@employee.EncryptedId"
+                   class="btn btn-primary m-1">View</a>
+                <a asp-action="edit" asp-controller="home"
+                   asp-route-id="@employee.Id"
+                   class="btn btn-primary m-1">Edit</a>
+                <a href="#" class="btn btn-danger m-1">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
+@{
+    /*
+     HOW TO MAKE on the other way hyperlink
+        
+    method:1
+
+        <a href="@Url.Action("details", "home", new { id = employee.Id })"
+        class="btn btn-primary">Show</a>
+
+    method:2
+
+        @Html.ActionLink("View", "details", "home", new { id = employee.Id})
+    */
+}
